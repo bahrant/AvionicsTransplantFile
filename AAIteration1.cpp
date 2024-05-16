@@ -22,21 +22,36 @@ Index:
 
 // Import necessary libraries 
 
+
 #include <vector>
 #include "Arduino.h"
 #include <Wire.h>
 #include <string>
+
+// **** Necessary dependencies to download
 #include "Adafruit_ICM20948.h"
 #include "Adafruit_ICM20X.h"
+#include <Adafruit_Sensor.h>
+#include "Adafruit_BMP3XX.h"
+#include "Adafruit_ADXL375.h"
+#include <Wire.h>
+
+//******
+
 
 using namespace std;
 
 // *****! Define constants (Set up 2 more i^2C busses and one SPI) 
 
 
-#define ICM_SCL 13
-#define ICM_SCA 12
+#define ICM_SDA 17
+#define ICM_SCL 16
 
+#define BMP_SDA 18
+#define BMP_SCL 19
+
+#define ACC_SDA 25
+#define ACC_SCL 24
 
 
 // Funciton prototypes 
@@ -51,14 +66,22 @@ string mhz433();
 
 
 
-// global variables 
+// Global variables 
 
 vector<string> errorCodes; 
 
+Adafruit_BMP3XX bmp;   // barometric pressure sensor
+Adafruit_ICM20948 icm; // Inertial measurment unit sensor 
+Adafruit_ADXL375 acc   // Accelerometer
 
+wire.begin();
+wire1.begin();
+wire2.begin();
 
 
 void setup() {
+
+
 
 
 }
