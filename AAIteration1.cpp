@@ -22,7 +22,8 @@ Index:
 
 // Import necessary libraries 
 
-
+#include <SPI.h>
+#include <LoRa.h>
 #include <vector>
 #include "Arduino.h"
 #include <Wire.h>
@@ -43,6 +44,20 @@ using namespace std;
 
 // *****! Define constants (Set up 2 more i^2C busses and one SPI) 
 
+/*
+* Constants for lora setup 
+#define LORA_BAND 433E6 
+#define SCK    system clock 
+#define MISO   Master in slave out 
+#define MOSI   Master out slave in
+#define SS     idk 
+#define RST    reset 
+#define DIO    interrupt request 
+
+
+what shoudl 
+
+*/
 
 #define ICM_SDA 17
 #define ICM_SCL 16
@@ -56,19 +71,23 @@ using namespace std;
 
 // Funciton prototypes 
 
-bool turnOn(); 
-bool apogeeReached(); 
-string identify(); 
-bool Await(); 
-void admin(); 
-void deployCharges(); 
-string mhz433();
+bool turnOn();        // "Turns on" flight computer
+bool apogeeReached(); // returns T/F based on wether the rocket has reached apogee or not 
+string identify();    // finds and identifies problems 
+bool Await();         // may be 
+void admin();         // menu for doing shit with the rocket: calibrate sensors,see battery life, check RSSI etc.. 
+void deployCharges(); // NEEDS WORK, LOGIC NOT YET DETERMINED 
+
+void inFlight();      // writes writes to sdCard and sends packets to groudstation
+
+void recordMessage(); // writes to sdCard and sends packets to groudstatoin
+
 
 
 
 // Global variables 
 
-vector<string> errorCodes; 
+vector<string[]> errorCodes;
 
 Adafruit_BMP3XX bmp;   // barometric pressure sensor
 Adafruit_ICM20948 icm; // Inertial measurment unit sensor 
@@ -81,6 +100,20 @@ wire2.begin();
 
 void setup() {
 
+//----- LoRa Setup: initalize ports, set transmission bandwidth in b/s 
+
+	Serial.begin(5000000); 
+
+	LoRa.setPins(SS, RST, DIO); 
+
+	LoRa.begin(LORA_BAND); 
+//------------------------------------------------
+
+
+
+
+
+
 
 
 
@@ -90,9 +123,9 @@ void setup() {
 
 void loop() {
 
-	if (turnOn()) {
+	if (turnOn()/*replace with await method... */ ) {
 
-		errorCodes.pushBack(string.isEmpty(Identify())); 
+		errorCodes.pushBack(Identify()); 
 
 
 
@@ -124,24 +157,19 @@ bool apogeeReached() {
 }
 string identify() {
 
+	string[] errors = {"low battery","low RSSI","General BMP error ","general accelerometer error", "general IMU error"}
 
-}
-bool Await() {
+	if (/*check if x is wrong */) { error[0] = ""; }
+	if () { error[1] = ""; }
+	if () { error[2] = ""; }
+	if () { error[3] = ""; }
+	if () { error[4] = ""; }
 
-	bool flag = true; // returned value 
-	string message;
-
-
-	while (433mhz()) {
-
-
-		}
-	
-
+	return errors[]; 
 
 }
 
-bool mhz433(Sti){
+bool await(){
 
 	//Method awaits on groundstation packet 
 
@@ -149,14 +177,16 @@ bool mhz433(Sti){
 
 	string message = "";
 
-	while (/*function to invoke promiscuous mode*/) {
+	while (message!=target) {
 
-		message = /* function that returns pmscs value*/
+		message = LoRa.parsePacket();
 
 			if (message = target) {
 				return true; 
 			}
 	}
+
+	return false; 
 
 }
 
@@ -183,4 +213,7 @@ void deployCharges() {
 * 
 * Notes: 
 * 1. dont forget to write an index at the top i.g. Lines 23 find() is defined, etc..
+* 2. adjust coding rate when RSSI drops
+* 
+* 2. low battery, signal strength indicator, 
 */
