@@ -50,9 +50,9 @@ using namespace std;
 #define SCK    system clock 
 #define MISO   Master in slave out 
 #define MOSI   Master out slave in
-#define SS     idk 
-#define RST    reset 
-#define DIO    interrupt request 
+       #define SS     clock #10
+       #define RST    reset pin #32 
+       #define DIO    interrupt request #26
 
 
 what shoudl 
@@ -68,6 +68,10 @@ what shoudl
 #define ACC_SDA 25
 #define ACC_SCL 24
 
+
+#define SS 10
+#define RST 32
+#define DIO 26
 
 // Funciton prototypes 
 
